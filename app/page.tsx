@@ -28,6 +28,9 @@ import {
 } from 'lucide-react'
 
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import { IoInfinite } from "react-icons/io5";
+import { SiLeetcode } from "react-icons/si"
+
 
 const profile = {
   name: 'Himanshu Kumar',
@@ -43,6 +46,7 @@ const navItems = [
   'About',
   'Skills',
   'Projects',
+  'LeetCode',
   'Journey',
   'Resume',
   'Contact',
@@ -62,12 +66,12 @@ const skillGroups = [
   {
     title: 'Backend',
     icon: Server,
-    items: ['Node.js', 'Express.js', 'REST APIs', 'GraphQL', 'Socket.IO'],
+    items: ['Node.js', 'Express.js', 'REST APIs', 'Socket.IO'],
   },
   {
     title: 'Database',
     icon: Database,
-    items: ['MongoDB', 'PostgreSQL', 'Prisma'],
+    items: ['MongoDB', 'PostgreSQL'],
   },
   {
     title: 'Tools & Platforms',
@@ -78,6 +82,7 @@ const skillGroups = [
       'Vercel',
       'Render',
       'Cloudinary',
+      'RazorPay',
       'Postman',
     ],
   },
@@ -93,47 +98,90 @@ const projects = [
       'Role-based authentication',
       'Student & educator dashboards',
       'Course and lecture management',
-      'Razorpay payments',
+      'Razorpay payment integration',
     ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Redux'],
+    tech: [
+      'React',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'Mongoose',
+      'Redux',
+      'JWT' ,
+      'Razorpay',
+      'Cloudinary',
+    ],
     repo: 'https://github.com/Himanshu777685/EduFlow.git',
-    demo: '#',
+    demo: 'https://edu-flow-five-murex.vercel.app/',
     accent: 'amber',
   },
+
   {
     name: 'MERN Chat Application',
     type: 'Real-time messaging',
     description:
-      'A responsive messaging experience built for fast, private conversations with a dependable real-time layer.',
+      'A full-stack real-time chat application with secure authentication, private messaging, and Socket.IO-powered communication.',
     features: [
       'JWT authentication',
       'HTTP-only cookies',
-      'Socket.IO messaging',
-      'Responsive interface',
+      'Real-time messaging with Socket.IO',
+      'Responsive chat interface',
     ],
-    tech: ['React', 'Express', 'MongoDB', 'Socket.IO'],
+    tech: [
+      'React',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'Socket.IO',
+      'JWT',
+    ],
     repo: 'https://github.com/Himanshu777685/chat-app.git',
-    demo: '#',
+    demo: 'https://chat-app-one-snowy-54.vercel.app/',
     accent: 'blue',
   },
 ]
-
 const repos = [
   {
     name: 'eduflow',
     description: 'A full-stack learning management system.',
     language: 'JavaScript',
-    stars: 12,
-    forks: 3,
+    type: 'Full Stack',
+    status: 'Completed',
   },
   {
     name: 'mern-chat-app',
     description: 'Real-time messaging with Socket.IO.',
     language: 'JavaScript',
-    stars: 8,
-    forks: 2,
+    type: 'Real time',
+    status: 'Completed',
   },
 ]
+
+const leetcodeStats = [
+  {
+    label: 'Problems Solved',
+    value: '250+',
+    detail: 'Consistent DSA practice',
+  },
+  {
+    label: 'Easy',
+    value: '100+',
+    detail: 'Foundation & patterns',
+  },
+  {
+    label: 'Medium',
+    value: '140+',
+    detail: 'Problem solving',
+  },
+  {
+    label: 'Hard',
+    value: '15+',
+    detail: 'Advanced challenges',
+  },
+]
+
+
+
 
 function SectionHeading({
   eyebrow,
@@ -145,7 +193,7 @@ function SectionHeading({
   copy?: string
 }) {
   return (
-    <div className="section-heading">
+    <div className="section-heading reveal">
       <span className="eyebrow">{eyebrow}</span>
       <h2>{title}</h2>
       {copy && <p>{copy}</p>}
@@ -324,6 +372,34 @@ export default function Page() {
     }
   }, [])
 
+
+  useEffect(() => {
+  const elements = document.querySelectorAll(
+    '.reveal, .reveal-left, .reveal-right, .stagger-item'
+  )
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.12,
+      rootMargin: '0px 0px -50px 0px',
+    }
+  )
+
+  elements.forEach((element) => observer.observe(element))
+
+  return () => observer.disconnect()
+}, [])
+
+
+
   const go = (id: string) => {
     document
       .getElementById(id)
@@ -391,7 +467,7 @@ export default function Page() {
         id="about"
         className="hero container"
       >
-        <div className="hero-copy">
+        <div className="hero-copy reveal">
           <div className="status">
             <span />
             Open to internship opportunities
@@ -448,7 +524,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="hero-visual">
+        <div className="hero-visual reveal-right">
           <div className="code-window">
             <div className="window-bar">
               <span />
@@ -508,7 +584,10 @@ export default function Page() {
 
           <div className="highlight">
             <span>03</span>
-            <b>∞</b>
+            <b>
+
+            <IoInfinite/>
+            </b>
             <small>Curiosity to learn</small>
           </div>
         </div>
@@ -530,8 +609,11 @@ export default function Page() {
 
             return (
               <div
-                className="skill-card"
+                className="skill-card reveal stagger-item"
                 key={group.title}
+                style={{
+    '--delay': `${skillGroups.indexOf(group) * 80}ms`,
+  } as React.CSSProperties}
               >
                 <div className="skill-title">
                   <Icon />
@@ -562,7 +644,7 @@ export default function Page() {
             copy="A selection of projects where I've explored full-stack development, real-time systems, and data."
           />
 
-          <div className="featured-project">
+          <div className="featured-project reveal">
             <div className="project-art amber-art">
               <div className="art-grid" />
 
@@ -577,7 +659,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="featured-copy">
+            <div className="featured-copy reveal-right">
               <span className="eyebrow">
                 FEATURED PROJECT
               </span>
@@ -624,7 +706,7 @@ export default function Page() {
           <div className="project-grid">
             {projects.slice(1).map((project) => (
               <article
-                className="project-card"
+                className="project-card reveal stagger-item"
                 key={project.name}
               >
                 <div
@@ -664,8 +746,8 @@ export default function Page() {
                     </a>
 
                     <a href={project.demo}>
-                      Demo
-                      <ArrowUpRight />
+                      Live Demo
+                      <ExternalLink />
                     </a>
                   </div>
                 </div>
@@ -675,16 +757,387 @@ export default function Page() {
         </div>
       </section>
 
+      <section
+  id="leetcode"
+  className="
+    section
+    container
+    text-[#e9e8e3]
+    [.light_&]:text-[#202124]
+  "
+>
+  <div className="section-heading reveal">
+    <span className="eyebrow">
+      04 / PROBLEM SOLVING
+    </span>
+
+    <h2>
+      Thinking in
+      <br />
+      <em>patterns &amp; solutions.</em>
+    </h2>
+
+    <p>
+      Regular DSA practice on LeetCode to strengthen
+      problem-solving, algorithms, and core computer
+      science fundamentals.
+    </p>
+  </div>
+
+  <div className="grid gap-3 md:grid-cols-[1.35fr_1fr]">
+
+    {/* Main LeetCode Card */}
+    <div
+      className="
+        relative overflow-hidden
+        border border-[#2b2d30]
+        bg-[#191a1d]
+        p-7
+        md:p-9
+
+        [.light_&]:border-[#d9dad6]
+        [.light_&]:bg-white
+      "
+    >
+
+      {/* Grid */}
+      <div
+        className="
+          pointer-events-none
+          absolute inset-0
+          opacity-[0.18]
+
+          [background-image:linear-gradient(#2b2d30_1px,transparent_1px),linear-gradient(90deg,#2b2d30_1px,transparent_1px)]
+          [background-size:42px_42px]
+
+          [.light_&]:opacity-[0.35]
+          [.light_&]:[background-image:linear-gradient(#d9dad6_1px,transparent_1px),linear-gradient(90deg,#d9dad6_1px,transparent_1px)]
+        "
+      />
+
+      <div className="relative z-10 flex h-full flex-col justify-between gap-10">
+
+        <div className="flex items-start justify-between gap-6">
+
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#e5a83b]">
+              LeetCode
+            </span>
+
+            <h3
+              className="
+                mt-3
+                text-4xl
+                font-medium
+                tracking-[-0.05em]
+                text-[#e9e8e3]
+                md:text-5xl
+
+                [.light_&]:text-[#202124]
+              "
+            >
+              250+
+            </h3>
+
+            <p
+              className="
+                mt-2
+                max-w-sm
+                text-sm
+                text-[#85868a]
+                [.light_&]:text-[#686a6d]
+              "
+            >
+              Problems solved through consistent
+              algorithm and data structure practice.
+            </p>
+          </div>
+
+          <div
+            className="
+              flex
+              h-11
+              w-11
+              shrink-0
+              items-center
+              justify-center
+              border
+              border-[#2b2d30]
+              bg-[#111214]
+              
+              text-[#e5a83b]
+
+              [.light_&]:border-[#d9dad6]
+              [.light_&]:bg-[#f3f3ef]
+            "
+          >
+            <SiLeetcode size={25}/>
+          </div>
+
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+
+          <div>
+            <span
+              className="
+                block
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.12em]
+                text-[#85868a]
+                [.light_&]:text-[#686a6d]
+              "
+            >
+              Focus
+            </span>
+
+            <span
+              className="
+                mt-1
+                block
+                text-sm
+                text-[#e9e8e3]
+                [.light_&]:text-[#202124]
+              "
+            >
+              DSA &amp; Algorithms
+            </span>
+          </div>
+
+          <span
+            className="
+              h-8
+              w-px
+              bg-[#2b2d30]
+              [.light_&]:bg-[#d9dad6]
+            "
+          />
+
+          <div>
+            <span
+              className="
+                block
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.12em]
+                text-[#85868a]
+                [.light_&]:text-[#686a6d]
+              "
+            >
+              Language
+            </span>
+
+            <span
+              className="
+                mt-1
+                block
+                text-sm
+                text-[#e9e8e3]
+                [.light_&]:text-[#202124]
+              "
+            >
+              C++
+            </span>
+          </div>
+
+          <span
+            className="
+              h-8
+              w-px
+              bg-[#2b2d30]
+              [.light_&]:bg-[#d9dad6]
+            "
+          />
+
+          <div>
+            <span
+              className="
+                block
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.12em]
+                text-[#85868a]
+                [.light_&]:text-[#686a6d]
+              "
+            >
+              Practice
+            </span>
+
+            <span
+              className="
+                mt-1
+                block
+                text-sm
+                text-[#e9e8e3]
+                [.light_&]:text-[#202124]
+              "
+            >
+              Consistent
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    {/* Difficulty cards */}
+    <div className="grid grid-cols-2 gap-3">
+
+      {leetcodeStats.slice(1).map((stat) => (
+        <div
+          key={stat.label}
+          className="
+            border
+            border-[#2b2d30]
+            bg-[#191a1d]
+            p-5
+            transition-all
+            duration-200
+            hover:-translate-y-1
+            hover:border-[#e5a83b]
+
+            [.light_&]:border-[#d9dad6]
+            [.light_&]:bg-white
+          "
+        >
+
+          <span
+            className="
+              font-mono
+              text-[10px]
+              uppercase
+              tracking-[0.12em]
+              text-[#85868a]
+
+              [.light_&]:text-[#686a6d]
+            "
+          >
+            {stat.label}
+          </span>
+
+          <strong
+            className="
+              mt-4
+              block
+              text-2xl
+              font-medium
+              tracking-[-0.04em]
+              text-[#e9e8e3]
+
+              [.light_&]:text-[#202124]
+            "
+          >
+            {stat.value}
+          </strong>
+
+          <p
+            className="
+              mt-2
+              text-[11px]
+              leading-relaxed
+              text-[#85868a]
+
+              [.light_&]:text-[#686a6d]
+            "
+          >
+            {stat.detail}
+          </p>
+
+        </div>
+      ))}
+
+    </div>
+  </div>
+
+
+  {/* Bottom */}
+  <div
+    className="
+      mt-5
+      flex
+      flex-wrap
+      items-center
+      justify-between
+      gap-4
+      border-t
+      border-[#2b2d30]
+      pt-5
+
+      [.light_&]:border-[#d9dad6]
+    "
+  >
+
+    <div className="flex items-center gap-3">
+
+      <span
+        className="
+          h-1.5
+          w-1.5
+          rounded-full
+          bg-[#e5a83b]
+          shadow-[0_0_0_4px_#2a2418]
+        "
+      />
+
+      <span
+        className="
+          font-mono
+          text-[10px]
+          uppercase
+          tracking-[0.12em]
+          text-[#85868a]
+
+          [.light_&]:text-[#686a6d]
+        "
+      >
+        Solving problems. Learning patterns. Improving daily.
+      </span>
+
+    </div>
+
+    <a
+      href="https://leetcode.com/u/Himanshu0112/"
+      target="_blank"
+      rel="noreferrer"
+      className="
+        inline-flex
+        items-center
+        gap-2
+        border-b
+        border-[#e5a83b]
+        pb-1
+        font-mono
+        text-[11px]
+        text-[#e5a83b]
+        transition-colors
+        hover:text-[#e9e8e3]
+
+        [.light_&]:hover:text-[#202124]
+      "
+    >
+      View LeetCode
+      <ArrowUpRight className="h-3.5 w-3.5" />
+    </a>
+
+  </div>
+</section>
+
       <section className="section container github-section">
         <SectionHeading
-          eyebrow="04 / OPEN SOURCE"
+          eyebrow="05 / OPEN SOURCE"
           title="More from the workshop."
         />
 
         <div className="repo-list">
           {repos.map((repo) => (
             <div
-              className="repo-row"
+              className="repo-row reveal stagger-item"
               key={repo.name}
             >
               <div className="repo-icon">
@@ -706,13 +1159,13 @@ export default function Page() {
               </span>
 
               <span className="repo-stat">
-                <Star />
-                {repo.stars}
+                 
+                 {repo.type}
               </span>
-
+                 
               <span className="repo-stat">
-                <GitFork />
-                {repo.forks}
+      
+                {repo.status}
               </span>
 
               <a
@@ -744,18 +1197,18 @@ export default function Page() {
       >
         <div className="container two-col">
           <SectionHeading
-            eyebrow="05 / THE JOURNEY"
+            eyebrow="06 / THE JOURNEY"
             title="Learning by doing."
             copy="I'm currently building projects and seeking opportunities to gain professional industry experience."
           />
 
           <div className="timeline">
-            <div className="timeline-item">
+            <div className="timeline-item reveal-left">
               <span className="timeline-dot" />
 
               <div>
                 <span className="eyebrow">
-                  2022 — PRESENT
+                  2024 — PRESENT
                 </span>
 
                 <h3>
@@ -775,7 +1228,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="timeline-item muted-item">
+            <div className="timeline-item muted-item reveal-left">
               <span className="timeline-dot" />
 
               <div>
@@ -803,10 +1256,10 @@ export default function Page() {
         id="resume"
         className="section container resume-section"
       >
-        <div className="resume-card">
+        <div className="resume-card reveal">
           <div>
             <span className="eyebrow">
-              06 / RESUME
+              07 / RESUME
             </span>
 
             <h2>
@@ -852,12 +1305,12 @@ export default function Page() {
       >
         <div>
           <SectionHeading
-            eyebrow="07 / SAY HELLO"
+            eyebrow="08 / SAY HELLO"
             title="Let's build something together."
             copy="Have an idea, an opportunity, or just want to talk tech? My inbox is always open."
           />
 
-          <div className="contact-links">
+          <div className="contact-links reveal-left">
             <a
               href={`mailto:${profile.email}`}
             >
@@ -888,7 +1341,9 @@ export default function Page() {
           </div>
         </div>
 
-        <ContactForm />
+        <div className='reveal-right'>
+          <ContactForm />
+        </div>
       </section>
 
       <footer>
